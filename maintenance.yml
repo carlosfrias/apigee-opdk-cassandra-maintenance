@@ -54,5 +54,5 @@
   vars_files:
   - ~/.apigee/credentials.yml
   roles:
-  - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
-  - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-stop-components }
+  - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}' }
