@@ -24,7 +24,7 @@
   hosts: dc-2-ds
   gather_facts: no
   vars:
-    opdk_region: 'dc-1'
+    opdk_region: 'dc-2'
   serial: 2
   roles:
   - { role: apigee-opdk-stop-components, tags: ['stop', 'restart'], component_name: 'apigee-cassandra' }
