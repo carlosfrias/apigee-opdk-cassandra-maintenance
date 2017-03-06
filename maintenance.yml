@@ -9,10 +9,10 @@
 
 - name: Nodetool rebuild to quickly sync Cassandra
   hosts: dc-1-ds
+  serial: 1
   gather_facts: no
   vars:
     opdk_region: 'dc-1'
-  serial: 1
   roles:
   - { role: apigee-opdk-stop-components, tags: ['stop', 'restart'], component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-start-components, tags: ['start', 'restart'], component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
@@ -22,6 +22,7 @@
 
 - name: Nodetool rebuild to quickly sync Cassandra
   hosts: dc-2-ds
+  serial: 1
   gather_facts: no
   vars:
     opdk_region: 'dc-2'
@@ -46,6 +47,7 @@
 
 - name: Apigee backup of all the Cassandra ring
   hosts: ds
+  serial: 1
   gather_facts: no
   roles:
   - { role: apigee-opdk-backup, component_profile: 'apigee-cassandra' }
