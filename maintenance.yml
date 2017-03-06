@@ -8,9 +8,24 @@
   - apigee-opdk-setup-default-settings
 
 - name: Nodetool rebuild to quickly sync Cassandra
-  hosts: ds
+  hosts: dc-1-ds
   gather_facts: no
+  vars:
+    opdk_region: 'dc-1'
   serial: 1
+  roles:
+  - { role: apigee-opdk-stop-components, tags: ['stop', 'restart'], component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-start-components, tags: ['start', 'restart'], component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-cassandra-rebuild, tags: ['rebuild'] }
+  - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
+
+- name: Nodetool rebuild to quickly sync Cassandra
+  hosts: dc-2-ds
+  gather_facts: no
+  vars:
+    opdk_region: 'dc-1'
+  serial: 2
   roles:
   - { role: apigee-opdk-stop-components, tags: ['stop', 'restart'], component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-start-components, tags: ['start', 'restart'], component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
