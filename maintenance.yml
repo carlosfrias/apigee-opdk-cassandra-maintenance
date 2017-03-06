@@ -42,15 +42,9 @@
   - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-cassandra-repair, tags: ['repair'] }
+  - { role: apigee-opdk-backup, component_profile: 'apigee-cassandra' }
   - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
-
-- name: Apigee backup of all the Cassandra ring
-  hosts: ds
-  serial: 1
-  gather_facts: no
-  roles:
-  - { role: apigee-opdk-backup, component_profile: 'apigee-cassandra' }
 
 - name: Rolling restart of RMP and MS
   hosts: rmp,ms
