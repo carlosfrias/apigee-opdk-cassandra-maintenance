@@ -1,0 +1,47 @@
+---
+- name: Update the ansible cache
+  hosts: planet
+  tags: ['cache']
+  vars_files:
+  - ~/.apigee/credentials.yml
+  roles:
+  - apigee-opdk-setup-default-settings
+
+- name: Nodetool rebuild to quickly sync Cassandra
+  hosts: ds
+  gather_facts: no
+  serial: 1
+  roles:
+  - { role: apigee-opdk-stop-components, tags: ['stop', 'restart'], component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-start-components, tags: ['start', 'restart'], component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-cassandra-rebuild, tags: ['rebuild'] }
+  - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
+
+- name: Nodetool streaming repair to verify data sync and compact data.
+  hosts: ds
+  gather_facts: no
+  serial: 1
+  roles:
+  - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-cassandra-repair, tags: ['repair'] }
+  - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
+
+- name: Apigee backup of all the Cassandra ring
+  hosts: ds
+  gather_facts: no
+  roles:
+  - { role: apigee-opdk-backup, component_profile: 'apigee-cassandra' }
+
+- name: Rolling restart of RMP and MS
+  hosts: rmp,ms
+  gather_facts: no
+  tags: ['restart_rmp_ms']
+  serial: 1
+  vars_files:
+  - ~/.apigee/credentials.yml
+  roles:
+  - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
+  - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
