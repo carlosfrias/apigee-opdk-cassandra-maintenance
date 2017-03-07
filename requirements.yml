@@ -12,3 +12,6 @@
 - src: https://github.com/carlosfrias/apigee-opdk-cache-update.git
 
 - src: https://github.com/carlosfrias/apigee-opdk-backup.git
+
+- src: https://github.com/carlosfrias/apigee-fetch-files.git
+
