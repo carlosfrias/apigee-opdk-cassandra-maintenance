@@ -25,6 +25,7 @@ a specific node or set of nodes.
 * restart: Restarts apigee-cassandra
 * restart_rmp_ms: Restarts routers, message processors and management server
 * cache: Update the cache with server facts used during playbook execution.
+* logs: Will only download logs and configs.
 
     
     
