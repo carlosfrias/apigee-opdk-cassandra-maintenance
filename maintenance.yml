@@ -28,6 +28,7 @@
     opdk_region: 'dc-2'
   serial: 2
   roles:
+  - apigee-opdk-cassandra-shutdown-preparation
   - { role: apigee-opdk-stop-components, tags: ['stop', 'restart'], component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-start-components, tags: ['start', 'restart'], component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-cassandra-rebuild, tags: ['rebuild'] }
@@ -39,6 +40,7 @@
   gather_facts: no
   serial: 1
   roles:
+  - apigee-opdk-cassandra-shutdown-preparation
   - { role: apigee-opdk-stop-components, component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-start-components, component_start_delay: '{{ start_delay | default(0) }}', component_name: 'apigee-cassandra' }
   - { role: apigee-opdk-cassandra-repair, tags: ['repair'] }
